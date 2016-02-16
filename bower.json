@@ -1,0 +1,23 @@
+{
+    "name": "white-lib-js",
+    "description": "General purpose JavaScript library for web-applications.",
+    "keywords": ["whitecode"],
+    "authors": [
+        "Sergey Nevmerzhitsky <sergey.nevmerzhitsky@gmail.com>"
+    ],
+    "main": [
+        "js/motion.js"
+    ],
+    "dependencies": {
+    },
+    "moduleType": ["amd", "globals", "node"],
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "private": true
+}

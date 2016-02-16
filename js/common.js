@@ -38,6 +38,18 @@ Math.bound = function(value, minBoundary, maxBoundary) {
     return Math.max(Math.min(value, maxBoundary), minBoundary);
 }
 
+ArrayUtils = {};
+ArrayUtils.diff = function(a, b) {
+    return a.filter(function(i) { return b.indexOf(i) < 0; });
+}
+
+//@link http://stackoverflow.com/a/17772086/3155344
+['Arguments', 'Array', 'Date', 'Function', 'Number', 'String', 'RegExp'].forEach(function(name) {
+  window['is' + name] = function(obj) {
+      return Object.prototype.toString.call(obj) === '[object '+ name +']';
+  };
+});
+
 
 /**
  *
@@ -467,4 +479,124 @@ function download(content, fileName, mimeType) {
     mimeType = mimeType || 'application/octet-stream';
     var blob = new Blob([content], {type: mimeType});
     saveAs(blob, fileName);
+}
+
+/**
+ * Convert nested objects of any deep to flatten grid for rendering HTML table.
+ * Order of cells depends on nesting order and order of elements of a leaf (if it's array).
+ */
+function flatNested (data, depth) {
+    if (typeof depth === 'undefined') {
+        depth = -1;
+    }
+
+    // Time to stop diving.
+    if (depth == 0) {
+        return [data];
+    }
+    // If not iterable.
+    if (jQuery.type(data) !== 'array' && jQuery.type(data) !== 'object') {
+        return [data];
+    }
+
+    var result = [];
+
+    // TODO Fill delivered row container, not local array.
+    jQuery.each(data, function(key, val) {
+        var subFlat = flatNested(val, depth - 1);
+
+        for (var j in subFlat) {
+            var cells = [];
+
+            // If data is object, then use current key as cell value.
+            if (! Array.isArray(data)) {
+                cells.push(key);
+            }
+            cells = cells.concat(subFlat[j]);
+
+            result.push(cells);
+        }
+    });
+
+    return result;
+}
+
+/**
+ * Check previous row fields is duplicate current (by $index).
+ */
+function isDiffFromPreviousRow (arr, index, fields) {
+    if (0 == index) {
+        return false;
+    }
+
+    fields = Array.isArray(fields) ? fields : [fields];
+
+    var isRepetition = true;
+    fields.forEach(function(field) {
+        isRepetition &= (arr[index - 1][field] == arr[index][field]);
+    });
+
+    return isRepetition;
+}
+
+/**
+ * Returns count of duplicates of fields values in $arr after $index value.
+ */
+function repeatsCount (arr, index, fields) {
+    fields = Array.isArray(fields) ? fields : [fields];
+
+    var result = 0;
+
+    for (var i = index + 1; i < arr.length; i++) {
+        var isRepetition = true;
+        fields.forEach(function(field) {
+            isRepetition &= (arr[i][field] == arr[index][field]);
+        });
+
+        if (isRepetition) {
+            result++;
+        } else {
+            break;
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Update a part of sourceArray if elements content different from newDataArray.
+ * Also delete and add whole keys of sourceArray - sync to keys of newDataArray.
+ */
+function syncArrays (sourceArray, newDataArray, isKeyEqual, updateValues) {
+    // Delete disappeared records.
+    for (var i = sourceArray.length - 1; i >= 0; i--) {
+        var found = false;
+        for (var j in newDataArray) {
+            if (isKeyEqual(sourceArray[i], newDataArray[j])) {
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            sourceArray.splice(i, 1);
+        }
+    }
+
+    // Update exists records.
+    for (var j in newDataArray) {
+        var found = false;
+        for (var i in sourceArray) {
+            if (isKeyEqual(sourceArray[i], newDataArray[j])) {
+                sourceArray[i] = updateValues(sourceArray[i], newDataArray[j]);
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            // Add new records.
+            sourceArray.push(newDataArray[j]);
+        }
+    }
 }

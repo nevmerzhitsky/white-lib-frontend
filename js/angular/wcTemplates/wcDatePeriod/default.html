@@ -1,0 +1,9 @@
+<input type="date" class="form-control" size="10" placeholder="YYYY-MM-DD" ng-model="startDate"
+    uib-datepicker-popup ng-click="startPicker.show($event)" ng-focus="startPicker.show($event)"
+    is-open="startPicker.opened" min-date="startPicker.minDate" max-date="startPicker.maxDate"
+    datepicker-options="options" ng-required="startRequired"/>
+&mdash;
+<input type="date" class="form-control" size="10" placeholder="YYYY-MM-DD" ng-model="finishDate"
+    uib-datepicker-popup ng-click="finishPicker.show($event)" ng-focus="finishPicker.show($event)"
+    is-open="finishPicker.opened" min-date="finishPicker.minDate" max-date="finishPicker.maxDate"
+    datepicker-options="options" ng-required="finishRequired"/>

@@ -8,10 +8,10 @@ app.constant('wcTemplatesDir', '/static/js/wcTemplates/');
  * Order of including JS files for using front-end library:
  * 1. local app.js
  * 2. library appCommon.js
- * 3. local appConfig.js
+ * 3. local appSetup.js
  */
 
-app.config(function($httpProvider, $rootScope) {
+app.config(function($httpProvider) {
     // Show and hide AJAX loader.
     var activeAjaxes = 0;
     var ajaxStart = function() {
@@ -52,7 +52,9 @@ app.config(function($httpProvider, $rootScope) {
             }
         };
     }]);
+});
 
+app.run(function($rootScope) {
     $rootScope.Utils = {
         Object: {
             keys: Object.keys,

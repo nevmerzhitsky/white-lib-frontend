@@ -1,6 +1,6 @@
 {
-    "name": "white-lib-js",
-    "description": "General purpose JavaScript library for web-applications.",
+    "name": "white-lib-frontend",
+    "description": "Front-end (JavaScript, CSS, fonts etc) general purpose library for WhiteCode LLC projects.",
     "keywords": ["whitecode"],
     "homepage": "http://whitecode.ru",
     "authors": [

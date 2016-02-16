@@ -44,10 +44,11 @@ ArrayUtils.diff = function(a, b) {
 }
 
 //@link http://stackoverflow.com/a/17772086/3155344
-['Arguments', 'Array', 'Date', 'Function', 'Number', 'String', 'RegExp'].forEach(function(name) {
-  window['is' + name] = function(obj) {
-      return Object.prototype.toString.call(obj) === '[object '+ name +']';
-  };
+var tempObjects = ['Arguments', 'Array', 'Date', 'Function', 'Number', 'String', 'RegExp'];
+tempObjects.forEach(function(name) {
+    window['is' + name] = function(obj) {
+        return Object.prototype.toString.call(obj) === '[object '+ name +']';
+    };
 });
 
 

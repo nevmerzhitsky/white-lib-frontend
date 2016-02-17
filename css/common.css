@@ -41,7 +41,7 @@ body {
     clear:both;
     }
 
-.alerts .alert:not(.ng-isolate-scope) {
+body > .alert, .alerts .alert:not(.ng-isolate-scope) {
     float:right;
     margin:20px;
     }
